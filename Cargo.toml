@@ -1,0 +1,22 @@
+# Cargo workspace: the Tauri app and the sync logic it is built on.
+#   sync-core/   the sync and the setup logic; no Tauri dependency
+#   src-tauri/   the tray app
+[workspace]
+members = ["src-tauri", "sync-core"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/klggr81/md-notes-sync"
+# An app, not a library for crates.io (sync-core is used as a git dependency)
+publish = false
+
+# Small exe: https://tauri.app/concept/size/#cargo-configuration
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

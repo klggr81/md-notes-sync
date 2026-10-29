@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <title>About md-notes-sync</title>
+    <script type="module" src="/src/about.ts" defer></script>
+  </head>
+
+  <body>
+    <!-- About: version, updates and links. Opened from the tray menu -->
+    <main class="about">
+      <header class="top">
+        <img class="app-icon" alt="" />
+        <div>
+          <h1>md-notes-sync</h1>
+          <p class="status-line" id="version">&nbsp;</p>
+        </div>
+      </header>
+      <p class="intro">Keeps your Markdown notes in sync between Nextcloud, Dropbox, Google Drive or an SFTP server and a folder on this PC.</p>
+
+      <h2 class="section">Updates</h2>
+      <div class="update">
+        <div class="card">
+          <span class="icon" data-glyph="download" id="up-icon"></span>
+          <svg class="ring" id="up-ring" viewBox="0 0 16 16" hidden><circle cx="8" cy="8" r="7" pathLength="100" /></svg>
+          <span class="badge" id="up-badge" hidden></span>
+          <div class="label" aria-live="polite">
+            <span id="up-title">Updates</span>
+            <span class="path" id="up-text">See if there is a newer version on GitHub.</span>
+          </div>
+          <button class="btn" id="up-check">Check for updates</button>
+        </div>
+        <div class="progress" id="up-progress" hidden>
+          <div class="bar"><div class="fill" id="up-fill"></div></div>
+          <span class="stats" id="up-stats"></span>
+        </div>
+        <div class="actions" id="up-actions" hidden>
+          <button class="btn accent" id="up-install">Install and restart</button>
+          <button class="btn subtle link" id="up-page">What's new</button>
+        </div>
+      </div>
+
+      <h2 class="section">Links</h2>
+      <ul class="cards links">
+        <li>
+          <button class="card" id="link-source">
+            <span class="icon" data-glyph="code"></span>
+            <span class="label"><span>Source code and help</span><span class="path" id="source-text">&nbsp;</span></span>
+            <span class="icon go" data-glyph="openExternal"></span>
+          </button>
+        </li>
+        <li>
+          <button class="card" data-url="https://kollege-gruenfeld.de">
+            <span class="icon" data-glyph="globe"></span>
+            <span class="label"><span>Developer</span><span class="path">kollege-gruenfeld.de</span></span>
+            <span class="icon go" data-glyph="openExternal"></span>
+          </button>
+        </li>
+        <li>
+          <button class="card" data-url="mailto:info@klggr.de">
+            <span class="icon" data-glyph="mail"></span>
+            <span class="label"><span>Contact</span><span class="path">info@klggr.de</span></span>
+            <span class="icon go" data-glyph="openExternal"></span>
+          </button>
+        </li>
+        <li>
+          <button class="card" data-url="https://buymeacoffee.com/klggr">
+            <span class="icon" data-glyph="heart"></span>
+            <span class="label"><span>Buy me a coffee</span><span class="path">buymeacoffee.com/klggr</span></span>
+            <span class="icon go" data-glyph="openExternal"></span>
+          </button>
+        </li>
+        <li>
+          <button class="card" id="link-license">
+            <span class="icon" data-glyph="certificate"></span>
+            <span class="label"><span>License</span><span class="path">GNU General Public License, version 3 or later</span></span>
+            <span class="icon go" data-glyph="openExternal"></span>
+          </button>
+        </li>
+      </ul>
+
+      <footer>Syncs with rclone (rclone.org, MIT license)</footer>
+    </main>
+  </body>
+</html>

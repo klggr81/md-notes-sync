@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <title>Sync notes</title>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+
+  <body>
+    <!-- Home: the folders, Sync now and the sync's output -->
+    <main id="home" hidden>
+      <header class="top">
+        <img class="app-icon" alt="" />
+        <div>
+          <h1>Sync notes</h1>
+          <p class="status-line" aria-live="polite">
+            <span class="badge neutral" id="status-badge"></span>
+            <svg class="ring" id="status-ring" viewBox="0 0 16 16" hidden><circle cx="8" cy="8" r="7" pathLength="100" /></svg>
+            <span id="subtitle">&nbsp;</span>
+          </p>
+        </div>
+      </header>
+
+      <div class="section-row">
+        <h2 class="section">Folders</h2>
+        <button class="btn subtle" id="change-setup" title="Change the cloud storage or the folders">Change</button>
+      </div>
+      <ul class="cards" id="folders">
+        <li class="card">
+          <span class="icon" data-glyph="laptop"></span>
+          <div class="label">
+            <span>On this PC</span>
+            <span id="local" class="path">…</span>
+          </div>
+          <button class="btn" id="open-notes" title="Open the notes folder in Explorer"><span class="icon" data-glyph="folder"></span>Open</button>
+        </li>
+        <li class="card">
+          <span class="icon" data-glyph="cloud"></span>
+          <div class="label">
+            <span>In the cloud</span>
+            <span id="remote" class="path">…</span>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Test run: offered by the setup, otherwise in the tray menu -->
+      <div class="actions" id="actions">
+        <button class="btn accent" id="sync-now"><span class="icon" data-glyph="sync"></span>Sync now</button>
+        <span class="spacer"></span>
+        <button class="btn subtle" id="open-log" title="Open sync.log"><span class="icon" data-glyph="log"></span>Log</button>
+        <button class="btn subtle" id="open-backups" title="Open the folder with the backups"><span class="icon" data-glyph="history"></span>Backups</button>
+      </div>
+
+      <section id="problem" class="infobar critical" hidden>
+        <span class="badge critical"></span>
+        <div>
+          <h2>Not set up yet</h2>
+          <p id="problem-text"></p>
+        </div>
+        <button class="btn" id="problem-setup">Set up</button>
+      </section>
+
+      <section id="run" class="run" hidden>
+        <div id="result" class="infobar" hidden>
+          <span class="badge" id="result-badge"></span>
+          <div>
+            <h2 id="result-title"></h2>
+            <p id="result-text"></p>
+          </div>
+          <button class="btn" id="resync" hidden><span class="icon" data-glyph="sync"></span>Resync</button>
+          <button class="btn" id="unlock" hidden title="Only if no other sync runs: the app checks that first"><span class="icon" data-glyph="unlock"></span>Remove lock and sync</button>
+        </div>
+        <div id="progress" class="progress" hidden>
+          <div class="bar"><div class="fill" id="fill"></div></div>
+          <span id="stats" class="stats"></span>
+        </div>
+        <ol id="lines" class="lines" aria-label="Sync output"></ol>
+      </section>
+
+      <footer id="footer"></footer>
+    </main>
+
+    <!-- Setup: one page per step, Back and Next at the bottom -->
+    <main id="wizard" class="wizard" hidden>
+      <header class="top">
+        <img class="app-icon" alt="" />
+        <div>
+          <h1>Set up</h1>
+          <p class="status-line" id="wz-step">&nbsp;</p>
+        </div>
+      </header>
+
+      <div class="wizard-body">
+        <section class="page" data-page="rclone">
+          <h2 class="page-title">rclone</h2>
+          <p class="intro">md-notes-sync syncs with rclone, a free program from rclone.org. It goes into md-notes-sync's folder, next to the app.</p>
+          <div class="infobar success" id="rc-found" hidden>
+            <span class="badge success"></span>
+            <div>
+              <h2>rclone is ready</h2>
+              <p id="rc-version"></p>
+            </div>
+          </div>
+          <div class="card" id="rc-missing" hidden>
+            <span class="icon" data-glyph="download"></span>
+            <div class="label">
+              <span>Download rclone</span>
+              <span class="path">About 30 MB from downloads.rclone.org, checked against its checksum.</span>
+            </div>
+            <button class="btn accent" id="rc-download">Download</button>
+          </div>
+          <div class="progress" id="rc-progress" hidden>
+            <div class="bar"><div class="fill" id="rc-fill"></div></div>
+            <span class="stats" id="rc-stats"></span>
+          </div>
+        </section>
+
+        <section class="page" data-page="cloud">
+          <h2 class="page-title">Where are your notes stored?</h2>
+          <div class="cards" role="radiogroup" aria-label="Cloud storage">
+            <label class="card choice">
+              <input type="radio" name="provider" value="nextcloud" />
+              <span class="icon" data-glyph="cloud"></span>
+              <div class="label"><span>Nextcloud</span><span class="path">For the Nextcloud Notes app on the web, Android and iOS</span></div>
+            </label>
+            <label class="card choice">
+              <input type="radio" name="provider" value="dropbox" />
+              <span class="icon" data-glyph="box"></span>
+              <div class="label"><span>Dropbox</span><span class="path">Any folder in your Dropbox</span></div>
+            </label>
+            <label class="card choice">
+              <input type="radio" name="provider" value="googleDrive" />
+              <span class="icon" data-glyph="drive"></span>
+              <div class="label"><span>Google Drive</span><span class="path">Any folder in your Google Drive</span></div>
+            </label>
+            <label class="card choice">
+              <input type="radio" name="provider" value="sftp" />
+              <span class="icon" data-glyph="server"></span>
+              <div class="label"><span>SFTP server</span><span class="path">A Hetzner Storage Box, or another server you reach with SFTP</span></div>
+            </label>
+          </div>
+        </section>
+
+        <section class="page" data-page="signin">
+          <h2 class="page-title" id="si-title">Connect</h2>
+          <div class="infobar success" id="si-connected" hidden>
+            <span class="badge success"></span>
+            <div>
+              <h2>Connected</h2>
+              <p id="si-connected-text"></p>
+            </div>
+            <button class="btn" id="si-again">Sign in again</button>
+          </div>
+
+          <div id="si-forms">
+            <div id="si-existing" hidden>
+              <p class="intro">You already use rclone with this account:</p>
+              <ul class="cards" id="si-existing-list"></ul>
+              <p class="intro or">Or sign in:</p>
+            </div>
+
+            <div id="si-nextcloud" hidden>
+              <label class="field">
+                <span>Server address</span>
+                <input type="text" id="si-server" placeholder="cloud.example.com" spellcheck="false" autocomplete="url" />
+                <span class="caption">The address you open Nextcloud with in the browser.</span>
+              </label>
+              <div class="actions">
+                <button class="btn accent" id="si-nc-browser"><span class="icon" data-glyph="globe"></span>Sign in with the browser</button>
+                <button class="btn subtle link" id="si-show-password">Use an app password instead</button>
+              </div>
+              <span class="caption">Safest: a separate Nextcloud user that only has your notes folder shared with it. Then md-notes-sync can't reach your other files.</span>
+              <div id="si-password" class="sub" hidden>
+                <label class="field">
+                  <span>User name</span>
+                  <input type="text" id="si-user" spellcheck="false" autocomplete="username" />
+                </label>
+                <label class="field">
+                  <span>App password</span>
+                  <input type="password" id="si-pass" autocomplete="off" />
+                  <span class="caption">Make one in Nextcloud: Settings &gt; Security &gt; Devices &amp; sessions &gt; Create new app password.</span>
+                </label>
+                <div class="actions"><button class="btn" id="si-nc-password">Connect</button></div>
+              </div>
+            </div>
+
+            <div id="si-sftp" hidden>
+              <div class="input-row">
+                <label class="field grow">
+                  <span>Server address</span>
+                  <input type="text" id="si-sftp-server" placeholder="u12345.your-storagebox.de" spellcheck="false" autocomplete="url" />
+                </label>
+                <label class="field port">
+                  <span>Port</span>
+                  <input type="text" id="si-sftp-port" placeholder="22" spellcheck="false" inputmode="numeric" />
+                </label>
+              </div>
+              <span class="caption">For a Hetzner Storage Box the port is 23 (filled in for you).</span>
+              <label class="field">
+                <span>User name</span>
+                <input type="text" id="si-sftp-user" spellcheck="false" autocomplete="username" />
+              </label>
+              <label class="field">
+                <span>Password</span>
+                <input type="password" id="si-sftp-pass" autocomplete="off" />
+                <span class="caption">Safest with a Storage Box: a sub-account that only sees the notes folder. Hetzner's console makes one with its own password.</span>
+              </label>
+              <div class="actions"><button class="btn accent" id="si-sftp-connect">Connect</button></div>
+            </div>
+
+            <div id="si-browser" hidden>
+              <p class="intro" id="si-browser-text"></p>
+              <div class="actions">
+                <button class="btn accent" id="si-cloud-browser"><span class="icon" data-glyph="globe"></span>Sign in with the browser</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="si-waiting" hidden>
+            <svg class="ring" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" pathLength="100" /></svg>
+            <div class="label">
+              <span id="si-waiting-text">Waiting for the sign-in in your browser…</span>
+              <span class="path" id="si-link-line" hidden>No browser opened? Copy this link into one: <span class="link-text" id="si-link"></span></span>
+            </div>
+            <button class="btn subtle" id="si-copy" hidden>Copy link</button>
+            <button class="btn" id="si-cancel">Cancel</button>
+          </div>
+          <div class="infobar critical" id="si-error" hidden>
+            <span class="badge critical"></span>
+            <div><p id="si-error-text"></p></div>
+          </div>
+        </section>
+
+        <section class="page" data-page="cloud-folder">
+          <h2 class="page-title" id="cf-title">Notes folder in the cloud</h2>
+          <div class="infobar info" id="cf-hint" hidden>
+            <span class="badge info"></span>
+            <div><p id="cf-hint-text"></p></div>
+          </div>
+          <label class="field">
+            <span>Folder</span>
+            <input type="text" id="cf-path" spellcheck="false" />
+            <span class="caption" id="cf-caption"></span>
+          </label>
+          <div class="browse">
+            <p class="caption" id="cf-browse-title"></p>
+            <ul class="folders" id="cf-list"></ul>
+          </div>
+          <div class="infobar caution" id="cf-warning" hidden>
+            <span class="badge caution"></span>
+            <div><p id="cf-warning-text"></p></div>
+            <button class="btn" id="cf-warning-action"></button>
+          </div>
+        </section>
+
+        <section class="page" data-page="local">
+          <h2 class="page-title">Notes folder on this PC</h2>
+          <p class="intro">Where should the notes be kept on this PC? This is the folder you open in your editor.</p>
+          <div class="field">
+            <label for="lf-path">Folder</label>
+            <div class="input-row">
+              <input type="text" id="lf-path" spellcheck="false" />
+              <button class="btn" id="lf-browse"><span class="icon" data-glyph="folder"></span>Browse…</button>
+            </div>
+          </div>
+          <div class="infobar critical" id="lf-error" hidden>
+            <span class="badge critical"></span>
+            <div><p id="lf-error-text"></p></div>
+          </div>
+        </section>
+
+        <section class="page" data-page="done">
+          <h2 class="page-title">Ready to save</h2>
+          <ul class="cards">
+            <li class="card">
+              <span class="icon" data-glyph="laptop"></span>
+              <div class="label"><span>On this PC</span><span class="path" id="dn-local"></span></div>
+            </li>
+            <li class="card">
+              <span class="icon" data-glyph="cloud"></span>
+              <div class="label"><span>In the cloud</span><span class="path" id="dn-remote"></span></div>
+            </li>
+          </ul>
+          <div class="infobar info" id="dn-note" hidden>
+            <span class="badge info"></span>
+            <div><p id="dn-note-text"></p></div>
+          </div>
+          <label class="card choice">
+            <input type="checkbox" id="dn-autostart" />
+            <div class="label">
+              <span>Start with Windows</span>
+              <span class="path">md-notes-sync then waits in the tray after you sign in to Windows. It only syncs when you click it.</span>
+            </div>
+          </label>
+          <p class="intro">After saving comes a test run: it shows what the first sync would copy and delete, and changes nothing.</p>
+        </section>
+
+        <section class="page" data-page="test">
+          <h2 class="page-title">Test run</h2>
+          <p class="intro" id="tr-intro"></p>
+          <div class="progress" id="tr-progress" hidden>
+            <div class="bar"><div class="fill" id="tr-fill"></div></div>
+            <span class="stats" id="tr-stats"></span>
+          </div>
+          <div class="infobar" id="tr-result" hidden>
+            <span class="badge" id="tr-badge"></span>
+            <div>
+              <h2 id="tr-title"></h2>
+              <p id="tr-text"></p>
+            </div>
+          </div>
+          <ol class="lines" id="tr-lines" aria-label="What the first sync would do" hidden></ol>
+        </section>
+      </div>
+
+      <footer class="wizard-nav">
+        <button class="btn subtle" id="wz-cancel">Cancel</button>
+        <span class="spacer"></span>
+        <button class="btn" id="wz-back">Back</button>
+        <button class="btn" id="wz-close" hidden title="Close the setup without syncing">Close</button>
+        <button class="btn accent" id="wz-next">Next</button>
+      </footer>
+    </main>
+
+    <div id="message" class="message critical" role="status" hidden>
+      <span class="badge critical" id="message-badge"></span>
+      <p id="message-text"></p>
+    </div>
+  </body>
+</html>

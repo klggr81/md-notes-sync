@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- Template for cargo-about (see about.toml): THIRD-PARTY-NOTICES.html in the release zip -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>md-notes-sync: third-party licenses</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #f3f3f3; --text-2: rgba(0, 0, 0, 0.606); --card: #ffffff; --stroke: rgba(0, 0, 0, 0.0578); --link: #003e92; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #202020; --text-2: rgba(255, 255, 255, 0.786); --card: #2b2b2b; --stroke: rgba(0, 0, 0, 0.1); --link: #99ebff; }
+    }
+    body { margin: 0 auto; max-width: 860px; padding: 32px 24px; background: var(--bg); font: 14px/20px "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
+    h1 { font: 600 28px/36px "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; margin: 0 0 12px; }
+    h2 { font: 600 20px/28px "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; margin: 0 0 8px; }
+    p, li { color: var(--text-2); }
+    a { color: var(--link); }
+    section { margin: 16px 0; padding: 16px 20px; background: var(--card); border: 1px solid var(--stroke); border-radius: 8px; }
+    .crates { margin: 0 0 12px; padding-left: 20px; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 12px/18px "Cascadia Mono", Consolas, monospace; margin: 0; }
+  </style>
+</head>
+<body>
+  <h1>Third-party licenses</h1>
+  <p>md-notes-sync is free software under the GNU General Public License, version 3 or later (see LICENSE). It is built with the open-source Rust libraries below, which are part of md-notes-sync.exe, and is released under their licenses.</p>
+  <p>The window also contains the JavaScript packages <code>@tauri-apps/api</code> and <code>@tauri-apps/plugin-dialog</code>, which come from the same projects and under the same licenses as the <code>tauri</code> and <code>tauri-plugin-dialog</code> crates below.</p>
+  <p>rclone is not included: the app downloads it from rclone.org. It is a separate program under the MIT license.</p>
+
+  <h2>Overview</h2>
+  <ul>
+    {{#each overview}}
+    <li><a href="#{{id}}">{{name}}</a> ({{count}})</li>
+    {{/each}}
+  </ul>
+
+  {{#each licenses}}
+  <section id="{{id}}">
+    <h2>{{name}}</h2>
+    <p>Used by:</p>
+    <ul class="crates">
+      {{#each used_by}}
+      <li><a href="{{#if crate.repository}}{{crate.repository}}{{else}}https://crates.io/crates/{{crate.name}}{{/if}}">{{crate.name}} {{crate.version}}</a></li>
+      {{/each}}
+    </ul>
+    <pre>{{text}}</pre>
+  </section>
+  {{/each}}
+</body>
+</html>

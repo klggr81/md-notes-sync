@@ -1,0 +1,474 @@
+/* Fluent 2 for Windows 11, in plain CSS: the theme resources of WinUI 3 (the
+   look of PowerToys and the Settings app). The window has the Mica backdrop,
+   so the page background stays clear; cards and controls are thin layers on it.
+   Accent: the Windows accent colour, set by main.ts (the defaults below are
+   Windows' blue). Icons: the Segoe Fluent Icons font that comes with Windows 11.
+   signin.html uses the same values. */
+:root {
+  color-scheme: light dark;
+  /* The seven shades of the accent; main.ts replaces them with the user's */
+  --accent-light-3: #99ebff;
+  --accent-light-2: #4cc2ff;
+  --accent-light-1: #0091f8;
+  --accent-base: #0078d4;
+  --accent-dark-1: #0067c0;
+  --accent-dark-2: #003e92;
+  --accent-dark-3: #001a68;
+
+  --accent: var(--accent-dark-1);
+  --accent-hover: color-mix(in srgb, var(--accent) 90%, transparent);
+  --accent-press: color-mix(in srgb, var(--accent) 80%, transparent);
+  --accent-text: var(--accent-dark-2);
+  --on-accent: #ffffff;
+  --on-accent-press: rgba(255, 255, 255, 0.7);
+  --accent-disabled: rgba(0, 0, 0, 0.217);
+  --accent-stroke: rgba(255, 255, 255, 0.08);
+  --accent-stroke-bottom: rgba(0, 0, 0, 0.4);
+
+  --text-1: rgba(0, 0, 0, 0.896);
+  --text-2: rgba(0, 0, 0, 0.606);
+  --text-3: rgba(0, 0, 0, 0.446);
+  --text-disabled: rgba(0, 0, 0, 0.361);
+  --text-inverse: #ffffff;
+
+  --solid-bg: #f3f3f3;
+  --card: rgba(255, 255, 255, 0.7);
+  --card-secondary: rgba(246, 246, 246, 0.5);
+  --card-stroke: rgba(0, 0, 0, 0.0578);
+  --control: rgba(255, 255, 255, 0.7);
+  --control-hover: rgba(249, 249, 249, 0.5);
+  --control-press: rgba(249, 249, 249, 0.3);
+  --control-stroke: rgba(0, 0, 0, 0.0578);
+  --control-stroke-bottom: rgba(0, 0, 0, 0.1622);
+  --control-stroke-top: var(--control-stroke);
+  --subtle-hover: rgba(0, 0, 0, 0.0373);
+  --subtle-press: rgba(0, 0, 0, 0.0241);
+  --strong-stroke: rgba(0, 0, 0, 0.446);
+  --flyout: #fcfcfc;
+  --flyout-shadow: 0 8px 16px rgba(0, 0, 0, 0.14);
+  --focus-outer: rgba(0, 0, 0, 0.896);
+  --focus-inner: #ffffff;
+
+  --success: #0f7b0f;
+  --success-bg: #dff6dd;
+  --caution: #9d5d00;
+  --caution-bg: #fff4ce;
+  --critical: #c42b1c;
+  --critical-bg: #fde7e9;
+  --neutral: rgba(0, 0, 0, 0.446);
+  --attention-bg: rgba(246, 246, 246, 0.5);
+  --input-focus: #ffffff;
+  --log-deleted: #b4009e;
+
+  /* Motion: Fluent's "fast out" curve, and its durations */
+  --ease: cubic-bezier(0, 0, 0, 1);
+  --fast: 83ms;
+  --normal: 167ms;
+  --slow: 250ms;
+
+  --font: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, monospace;
+  --font-icons: "Segoe Fluent Icons", "Segoe MDL2 Assets";
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent: var(--accent-light-2);
+    --accent-text: var(--accent-light-3);
+    --on-accent: #000000;
+    --on-accent-press: rgba(0, 0, 0, 0.5);
+    --accent-disabled: rgba(255, 255, 255, 0.158);
+    --accent-stroke: rgba(255, 255, 255, 0.08);
+    --accent-stroke-bottom: rgba(0, 0, 0, 0.14);
+
+    --text-1: #ffffff;
+    --text-2: rgba(255, 255, 255, 0.786);
+    --text-3: rgba(255, 255, 255, 0.545);
+    --text-disabled: rgba(255, 255, 255, 0.363);
+    --text-inverse: rgba(0, 0, 0, 0.896);
+
+    --solid-bg: #202020;
+    --card: rgba(255, 255, 255, 0.0512);
+    --card-secondary: rgba(255, 255, 255, 0.0326);
+    --card-stroke: rgba(0, 0, 0, 0.1);
+    --control: rgba(255, 255, 255, 0.0605);
+    --control-hover: rgba(255, 255, 255, 0.0837);
+    --control-press: rgba(255, 255, 255, 0.0326);
+    --control-stroke: rgba(255, 255, 255, 0.0698);
+    --control-stroke-bottom: rgba(255, 255, 255, 0.0698);
+    --control-stroke-top: rgba(255, 255, 255, 0.093);
+    --subtle-hover: rgba(255, 255, 255, 0.0605);
+    --subtle-press: rgba(255, 255, 255, 0.0419);
+    --strong-stroke: rgba(255, 255, 255, 0.545);
+    --flyout: #2c2c2c;
+    --flyout-shadow: 0 8px 16px rgba(0, 0, 0, 0.26);
+    --focus-outer: #ffffff;
+    --focus-inner: rgba(0, 0, 0, 0.7);
+
+    --success: #6ccb5f;
+    --success-bg: #393d1b;
+    --caution: #fce100;
+    --caution-bg: #433519;
+    --critical: #ff99a4;
+    --critical-bg: #442726;
+    --neutral: rgba(255, 255, 255, 0.545);
+    --attention-bg: rgba(255, 255, 255, 0.0326);
+    --input-focus: rgba(30, 30, 30, 0.7);
+    --log-deleted: #f589e5;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+/* Clear for Mica; main.ts adds .solid where Windows has no Mica */
+body {
+  margin: 0;
+  background: transparent;
+  color: var(--text-1);
+  font: 14px/20px var(--font);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.solid body { background: var(--solid-bg); }
+
+main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 24px 12px;
+}
+
+h1, h2, p { margin: 0; }
+
+/* Segoe Fluent Icons glyph (filled in by main.ts) */
+.icon { font: normal 16px/1 var(--font-icons); flex: none; display: inline-block; width: 1em; text-align: center; }
+
+/* --- Header: app icon, title, status line ----------------------------------- */
+.top { display: flex; align-items: center; gap: 16px; }
+.top img { flex: none; width: 52px; height: 52px; }
+h1 { font: 600 28px/36px var(--font-display); }
+.status-line { display: flex; align-items: center; gap: 8px; min-height: 20px; color: var(--text-2); }
+
+/* Status badge: a filled circle with a glyph, like an InfoBar's icon */
+.badge { position: relative; flex: none; width: 16px; height: 16px; font: normal 16px/1 var(--font-icons); }
+.badge::before { content: "\F136"; position: absolute; inset: 0; color: var(--badge, var(--neutral)); }
+.badge::after { content: var(--mark, "\F13F"); position: absolute; inset: 0; color: var(--text-inverse); }
+.badge.success { --badge: var(--success); --mark: "\F13E"; }
+.badge.critical { --badge: var(--critical); --mark: "\F13D"; }
+.badge.info { --badge: var(--accent); --mark: "\F13F"; }
+.badge.neutral { --badge: var(--neutral); --mark: "\F13F"; }
+
+/* Progress ring (indeterminate), 16 px, in place of the badge while syncing */
+.ring { flex: none; width: 16px; height: 16px; animation: spin 2s linear infinite; }
+.ring circle { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 1 100; animation: ring 2s ease-in-out infinite; }
+
+/* --- Folder cards, like the setting cards in PowerToys ---------------------- */
+.section { font: 600 14px/20px var(--font); margin: 4px 0 -8px; }
+/* minmax(0, …): a long path is cut off with … instead of widening the page */
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 68px;
+  padding: 12px 16px;
+  background: var(--card);
+  border: 1px solid var(--card-stroke);
+  border-radius: 4px;
+}
+.card > .icon { font-size: 20px; color: var(--text-1); }
+.label { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.path { color: var(--text-2); font-size: 12px; line-height: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; user-select: text; -webkit-user-select: text; }
+
+/* --- Buttons: standard, accent, subtle -------------------------------------- */
+.actions { display: flex; align-items: center; gap: 8px; }
+.spacer { flex: 1; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 4px 11px 5px;
+  border: 1px solid var(--control-stroke);
+  border-top-color: var(--control-stroke-top);
+  border-bottom-color: var(--control-stroke-bottom);
+  border-radius: 4px;
+  background: var(--control);
+  color: var(--text-1);
+  font: 14px/20px var(--font);
+  cursor: default;
+  transition: background var(--fast) linear, color var(--fast) linear;
+}
+.btn .icon { font-size: 16px; }
+.btn:hover:not(:disabled) { background: var(--control-hover); }
+.btn:active:not(:disabled) { background: var(--control-press); color: var(--text-2); border-bottom-color: var(--control-stroke); }
+.btn:disabled { color: var(--text-disabled); background: var(--control-press); border-color: var(--control-stroke); }
+.btn:focus-visible { outline: 2px solid var(--focus-outer); outline-offset: 1px; box-shadow: inset 0 0 0 1px var(--focus-inner); }
+
+.btn.accent {
+  min-width: 120px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent-stroke);
+  border-bottom-color: var(--accent-stroke-bottom);
+}
+.btn.accent:hover:not(:disabled) { background: var(--accent-hover); }
+.btn.accent:active:not(:disabled) { background: var(--accent-press); color: var(--on-accent-press); border-bottom-color: var(--accent-stroke); }
+.btn.accent:disabled { background: var(--accent-disabled); color: var(--text-inverse); border-color: transparent; opacity: 0.9; }
+
+.btn.subtle { background: transparent; border-color: transparent; }
+.btn.subtle:hover:not(:disabled) { background: var(--subtle-hover); }
+.btn.subtle:active:not(:disabled) { background: var(--subtle-press); }
+.btn.subtle:disabled { background: transparent; border-color: transparent; }
+
+/* --- InfoBar: the result of a sync, and problems ----------------------------- */
+.infobar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px 12px;
+  min-height: 48px;
+  padding: 14px 16px 13px;
+  border: 1px solid var(--card-stroke);
+  border-radius: 4px;
+  background: var(--attention-bg);
+  animation: appear var(--slow) var(--ease) both;
+}
+.infobar .badge { margin-top: 2px; }
+.infobar > div { flex: 1 1 260px; min-width: 0; }
+.infobar h2 { display: inline; font: 600 14px/20px var(--font); margin-right: 12px; }
+.infobar p { display: inline; overflow-wrap: anywhere; user-select: text; -webkit-user-select: text; }
+.infobar .btn { flex: none; margin: -6px 0 -5px auto; }
+.infobar.success { background: var(--success-bg); }
+.infobar.critical { background: var(--critical-bg); }
+
+/* --- Run: progress bar and the log ------------------------------------------- */
+.run { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; }
+
+.progress { display: flex; flex-direction: column; gap: 6px; }
+/* Fluent ProgressBar: a 1 px track and a 3 px accent bar */
+.bar { position: relative; height: 3px; overflow: hidden; border-radius: 2px; }
+.bar::before { content: ""; position: absolute; left: 0; right: 0; top: 1px; height: 1px; background: var(--strong-stroke); }
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--done, 0%);
+  border-radius: 2px;
+  background: var(--accent);
+  transition: width var(--slow) var(--ease);
+}
+.progress.unknown .bar::before { display: none; }
+.progress.unknown .fill { width: 40%; transition: none; animation: indeterminate 2s var(--ease) infinite; }
+.stats { color: var(--text-2); font-size: 12px; line-height: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.lines {
+  flex: 1;
+  min-height: 80px;
+  margin: 0;
+  padding: 10px 12px;
+  list-style: none;
+  overflow: auto;
+  border: 1px solid var(--card-stroke);
+  border-radius: 8px;
+  background: var(--card-secondary);
+  font: 12px/18px var(--font-mono);
+  color: var(--text-2);
+  user-select: text;
+  -webkit-user-select: text;
+}
+/* Fluent scroll bar: thin and without arrows, wider while the pointer is on it */
+.lines::-webkit-scrollbar { width: 14px; }
+.lines::-webkit-scrollbar-thumb { border: 5px solid transparent; border-radius: 7px; background: var(--strong-stroke) padding-box; }
+.lines::-webkit-scrollbar-thumb:hover { border-width: 4px; }
+.lines li { white-space: pre-wrap; overflow-wrap: anywhere; padding-left: 70px; text-indent: -70px; }
+.lines time { display: inline-block; width: 70px; text-indent: 0; color: var(--text-3); }
+.lines .copied { color: var(--success); }
+.lines .wouldCopy { color: var(--accent-text); }
+.lines .deleted, .lines .wouldDelete { color: var(--log-deleted); }
+.lines .warning { color: var(--caution); }
+.lines .error { color: var(--critical); font-weight: 600; }
+.lines .success { color: var(--success); font-weight: 600; }
+.lines .dim { color: var(--text-3); }
+.lines .start { color: var(--text-1); font-weight: 600; }
+
+footer { margin-top: auto; color: var(--text-3); font-size: 12px; line-height: 16px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* --- Message: an InfoBar that floats over the window --------------------------- */
+.message {
+  position: fixed;
+  left: 24px;
+  right: 24px;
+  bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px 13px;
+  border: 1px solid var(--card-stroke);
+  border-radius: 8px;
+  background: linear-gradient(var(--critical-bg), var(--critical-bg)), var(--flyout);
+  box-shadow: var(--flyout-shadow);
+  animation: rise var(--slow) var(--ease) both;
+}
+.message .badge { margin-top: 2px; }
+.message p { overflow-wrap: anywhere; user-select: text; -webkit-user-select: text; }
+.message.caution { background: linear-gradient(var(--caution-bg), var(--caution-bg)), var(--flyout); }
+.message.info { background: var(--flyout); }
+
+/* --- Setup wizard ------------------------------------------------------------------ */
+.section-row { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 -10px; }
+.section-row .section { margin: 0; }
+.section-row .btn { margin-right: -11px; }
+
+.wizard-body { flex: 1; min-height: 0; overflow: auto; margin: 0 -24px; padding: 4px 24px 8px; }
+.wizard-body::-webkit-scrollbar { width: 14px; }
+.wizard-body::-webkit-scrollbar-thumb { border: 5px solid transparent; border-radius: 7px; background: var(--strong-stroke) padding-box; }
+.page { display: flex; flex-direction: column; gap: 16px; animation: appear var(--slow) var(--ease) both; }
+.page-title { font: 600 20px/28px var(--font-display); }
+.page .path { white-space: normal; }
+/* The test run's file list in the setup */
+.page .lines { flex: none; max-height: 240px; }
+.page .lines li { padding-left: 0; text-indent: 0; }
+#si-forms, #si-existing, #si-nextcloud, #si-sftp, #si-browser { display: flex; flex-direction: column; gap: 12px; }
+#si-sftp .caption { margin-top: -6px; }
+.field.grow { flex: 1; min-width: 0; }
+.field.port input { width: 88px; }
+#si-forms { gap: 20px; }
+.intro { color: var(--text-2); }
+.intro.or { margin-top: 4px; }
+.caption { color: var(--text-2); font-size: 12px; line-height: 16px; }
+.wizard-nav { display: flex; align-items: center; gap: 8px; margin: 0 -24px; padding: 12px 24px 0; border-top: 1px solid var(--card-stroke); }
+.wizard-nav .btn { min-width: 96px; }
+.wizard-nav #wz-cancel { min-width: 0; margin-left: -11px; }
+.sub { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; padding: 16px; border: 1px solid var(--card-stroke); border-radius: 4px; background: var(--card-secondary); }
+.link-text { color: var(--accent-text); overflow-wrap: anywhere; user-select: text; -webkit-user-select: text; }
+.btn.link { color: var(--accent-text); }
+
+/* Text box */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.input-row { display: flex; gap: 8px; }
+.input-row input { flex: 1; min-width: 0; }
+input[type="text"],
+input[type="password"] {
+  height: 32px;
+  padding: 5px 11px 6px;
+  border: 1px solid var(--control-stroke);
+  border-bottom-color: var(--strong-stroke);
+  border-radius: 4px;
+  background: var(--control);
+  color: var(--text-1);
+  font: 14px/20px var(--font);
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+input[type="text"]:hover,
+input[type="password"]:hover { background: var(--control-hover); }
+input[type="text"]:focus,
+input[type="password"]:focus { background: var(--input-focus); border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
+input::placeholder { color: var(--text-3); }
+
+/* A card that is a choice, with a radio button or checkbox on the left */
+.card.choice { cursor: default; transition: background var(--fast) linear; }
+.card.choice:hover { background: var(--control-hover); }
+input[type="radio"],
+input[type="checkbox"] {
+  appearance: none;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--strong-stroke);
+  background: var(--control-press);
+  transition: background var(--fast) linear, border-color var(--fast) linear;
+}
+input[type="radio"] { border-radius: 50%; }
+input[type="checkbox"] { border-radius: 4px; }
+input[type="radio"]:checked,
+input[type="checkbox"]:checked { border: none; background: var(--accent); }
+input[type="radio"]:checked::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--on-accent); transition: transform var(--normal) var(--ease); }
+.card.choice:hover input[type="radio"]:checked::after { transform: scale(1.2); }
+input[type="checkbox"]:checked::after { content: "\E73E"; font: 12px/1 var(--font-icons); color: var(--on-accent); }
+input[type="radio"]:focus-visible,
+input[type="checkbox"]:focus-visible { outline: 2px solid var(--focus-outer); outline-offset: 2px; }
+
+/* Folder browser */
+.browse { display: flex; flex-direction: column; gap: 6px; }
+.folders {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  max-height: 220px;
+  overflow: auto;
+  border: 1px solid var(--card-stroke);
+  border-radius: 4px;
+  background: var(--card-secondary);
+}
+.folders:empty { display: none; }
+.folder-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 32px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-1);
+  font: 14px/20px var(--font);
+  text-align: left;
+  cursor: default;
+}
+.folder-row:hover { background: var(--subtle-hover); }
+.folder-row:active { background: var(--subtle-press); }
+.folder-row:focus-visible { outline: 2px solid var(--focus-outer); }
+
+.infobar.caution { background: var(--caution-bg); }
+.badge.caution { --badge: var(--caution); --mark: "\F13C"; }
+.card .ring { width: 20px; height: 20px; }
+
+/* --- About window: the update card and the links ------------------------------------- */
+.about { gap: 12px; }
+.about .intro { margin-top: -2px; }
+.about .section { margin: 8px 0 -4px; }
+.update { display: flex; flex-direction: column; gap: 12px; }
+.update .path { white-space: normal; }
+.update .card > .badge { width: 20px; height: 20px; font-size: 20px; }
+.links .card {
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 16px;
+  color: var(--text-1);
+  font: 14px/20px var(--font);
+  text-align: left;
+  cursor: default;
+  transition: background var(--fast) linear;
+}
+.links .card:hover { background: var(--control-hover); }
+.links .card:active { background: var(--control-press); }
+.links .card:focus-visible { outline: 2px solid var(--focus-outer); outline-offset: 1px; }
+.links .card > .go { font-size: 12px; color: var(--text-2); }
+
+[hidden] { display: none !important; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes ring {
+  0% { stroke-dasharray: 10 100; stroke-dashoffset: 0; }
+  50% { stroke-dasharray: 65 100; stroke-dashoffset: -20; }
+  100% { stroke-dasharray: 10 100; stroke-dashoffset: -100; }
+}
+@keyframes indeterminate { from { left: -40%; } to { left: 100%; } }
+@keyframes appear { from { opacity: 0; transform: translateY(-4px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}

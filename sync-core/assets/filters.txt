@@ -1,0 +1,13 @@
+# rclone filter rules for bisync. After a change, the next sync stops and asks for a resync:
+# click Resync in the window.
+- Thumbs.db
+- desktop.ini
+- .DS_Store
+- ~$*
+- *.tmp
+# Hidden folders hold app data, never notes: Obsidian (.obsidian/, .trash/), VS Code (.vscode/),
+# git, plugins. Nextcloud Notes ignores them too, except its image folders .attachments.<id>/.
++ .attachments.*/**
+- .*/**
+# Note app databases (e.g. notes.sqlite of the VS Code extension "Notes")
+- *.sqlite*

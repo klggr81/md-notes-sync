@@ -1,0 +1,178 @@
+<!doctype html>
+<!--
+  Page shown in the browser after signing in to Dropbox or Google Drive.
+  rclone fills it in as a Go template (rclone authorize --template); the app
+  replaces __SERVICE__ with the service's name first. Design: Fluent 2 for
+  Windows 11, the same values as the app window (src/styles.css).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ if .OK }}Signed in to __SERVICE__{{ else }}Sign-in failed{{ end }} · md-notes-sync</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --accent: #005fb8;
+    --on-accent: #ffffff;
+    --accent-text: #003e92;
+    --text-1: rgba(0, 0, 0, 0.896);
+    --text-2: rgba(0, 0, 0, 0.606);
+    --solid-bg: #f3f3f3;
+    --card: rgba(255, 255, 255, 0.7);
+    --card-stroke: rgba(0, 0, 0, 0.0578);
+    --layer: rgba(255, 255, 255, 0.5);
+    --success: #0f7b0f;
+    --critical: #c42b1c;
+    --critical-bg: #fde7e9;
+    --text-inverse: #ffffff;
+    --shadow: 0 8px 16px rgba(0, 0, 0, 0.14);
+    --ease: cubic-bezier(0, 0, 0, 1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --accent: #60cdff;
+      --on-accent: #000000;
+      --accent-text: #99ebff;
+      --text-1: #ffffff;
+      --text-2: rgba(255, 255, 255, 0.786);
+      --solid-bg: #202020;
+      --card: rgba(255, 255, 255, 0.0512);
+      --card-stroke: rgba(0, 0, 0, 0.1);
+      --layer: rgba(58, 58, 58, 0.3);
+      --success: #6ccb5f;
+      --critical: #ff99a4;
+      --critical-bg: #442726;
+      --text-inverse: rgba(0, 0, 0, 0.896);
+      --shadow: 0 8px 16px rgba(0, 0, 0, 0.26);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    background: var(--solid-bg);
+    color: var(--text-1);
+    font: 14px/20px "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  }
+  main {
+    width: min(100%, 480px);
+    padding: 32px 32px 28px;
+    border: 1px solid var(--card-stroke);
+    border-radius: 8px;
+    background: var(--layer);
+    box-shadow: var(--shadow);
+    animation: rise 333ms var(--ease) both;
+  }
+  .hero {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    animation: pop 333ms var(--ease) 80ms both;
+  }
+  .ok .hero { background: var(--success); }
+  .fail .hero { background: var(--critical); }
+  .hero svg { width: 32px; height: 32px; }
+  .mark {
+    fill: none;
+    stroke: var(--text-inverse);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: draw 250ms var(--ease) 300ms forwards;
+  }
+  h1 {
+    margin: 0 0 8px;
+    font: 600 28px/36px "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  }
+  p { margin: 0; color: var(--text-2); }
+  .lead { font-size: 16px; line-height: 22px; margin-bottom: 24px; }
+  /* Steps as setting cards */
+  ul { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 4px; }
+  li {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    min-height: 68px;
+    padding: 12px 16px;
+    border: 1px solid var(--card-stroke);
+    border-radius: 4px;
+    background: var(--card);
+    animation: rise 333ms var(--ease) both;
+  }
+  li:nth-child(1) { animation-delay: 150ms; }
+  li:nth-child(2) { animation-delay: 210ms; }
+  li b { display: block; font-weight: 400; color: var(--text-1); }
+  li span { color: var(--text-2); font-size: 12px; line-height: 16px; }
+  .step {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+  .fail li { background: var(--critical-bg); }
+  .small { font-size: 12px; line-height: 16px; }
+  .details { font: 12px/18px "Cascadia Mono", Consolas, monospace; overflow-wrap: anywhere; }
+  a { color: var(--accent-text); }
+  a:hover { text-decoration: none; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+  @keyframes pop { from { opacity: 0; transform: scale(0.6); } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+{{ if .OK }}
+<main class="ok">
+  <div class="hero" aria-hidden="true">
+    <svg viewBox="0 0 32 32"><path class="mark" d="M8 16.5 L13.5 22 L24 11"/></svg>
+  </div>
+  <h1>Signed in to __SERVICE__</h1>
+  <p class="lead">md-notes-sync can now reach your notes in __SERVICE__.</p>
+  <ul>
+    <li>
+      <span class="step" aria-hidden="true">1</span>
+      <div><b>Close this tab</b><span>and go back to md-notes-sync.</span></div>
+    </li>
+    <li>
+      <span class="step" aria-hidden="true">2</span>
+      <div><b>The setup continues there</b><span>It tests the connection and asks which folder holds your notes.</span></div>
+    </li>
+  </ul>
+  <p class="small">md-notes-sync never sees your password. __SERVICE__ gave it an access key, which is stored in rclone.conf on your PC. You can withdraw it in your __SERVICE__ account settings at any time.</p>
+</main>
+{{ else }}
+<main class="fail">
+  <div class="hero" aria-hidden="true">
+    <svg viewBox="0 0 32 32"><path class="mark" d="M11 11 L21 21 M21 11 L11 21"/></svg>
+  </div>
+  <h1>Sign-in didn't work</h1>
+  <p class="lead">__SERVICE__ didn't give access. Go back to md-notes-sync to try again.</p>
+  <ul>
+    <li>
+      <div>
+        <b>What __SERVICE__ reported</b>
+        <span class="details">{{ .Name }}{{ if .Description }}: {{ .Description }}{{ end }}{{ if .Code }} ({{ .Code }}){{ end }}</span>
+      </div>
+    </li>
+  </ul>
+  {{ if .HelpURL }}<p class="small"><a href="{{ .HelpURL }}">More about this error</a></p>{{ end }}
+</main>
+{{ end }}
+</body>
+</html>

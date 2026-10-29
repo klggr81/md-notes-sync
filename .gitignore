@@ -1,0 +1,13 @@
+# Private working notes
+CLAUDE.md
+PLAN.md
+
+# Build output and dependencies
+node_modules/
+dist/
+target/
+release/
+src-tauri/gen/
+
+# A development build keeps its settings, rclone, state, logs and backups here
+.dev/

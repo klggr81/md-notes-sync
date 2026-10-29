@@ -1,0 +1,65 @@
+# Builds md-notes-sync.exe and the release zip on every push.
+# A tag vX.Y.Z also publishes the zip as a GitHub release, with the notes of
+# that version from CHANGELOG.md.
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write # create the release on tags
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: .
+
+      # THIRD-PARTY-NOTICES.html in the zip
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-about
+
+      - run: npm ci
+
+      - name: Test sync-core
+        run: cargo test -p sync-core
+
+      - name: Build exe and zip
+        shell: powershell
+        run: .\package.ps1
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: md-notes-sync
+          path: release/*.zip
+
+      - name: Publish release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          zip="release/md-notes-sync-$version.zip"
+          if [ ! -f "$zip" ]; then
+            echo "Tag $GITHUB_REF_NAME doesn't match the version in Cargo.toml"; exit 1
+          fi
+          # Release notes: the section of this version in CHANGELOG.md
+          awk -v v="$version" 'index($0, "## [" v "]") == 1 {f=1; next} /^## [[]/ {f=0} f' CHANGELOG.md > notes.md
+          gh release create "$GITHUB_REF_NAME" "$zip" --title "md-notes-sync $version" --notes-file notes.md

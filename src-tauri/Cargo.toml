@@ -1,0 +1,31 @@
+[package]
+name = "md-notes-sync"
+description = "Tray app for the two-way sync between your notes in Nextcloud, Dropbox, Google Drive or on an SFTP server and a folder on Windows"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lib]
+# The _lib suffix keeps the lib name apart from the bin name (a Windows issue,
+# see https://github.com/rust-lang/cargo/issues/8519)
+name = "md_notes_sync_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+sync-core = { path = "../sync-core" }
+tauri = { version = "2", features = ["image-png", "tray-icon"] }
+serde = { version = "1", features = ["derive"] }
+tauri-plugin-single-instance = "2.5.5"
+tauri-plugin-dialog = "2.8.4"
+# Check for updates: the same versions as in sync-core
+sha2 = "0.11.1"
+ureq = { version = "3.5.0", default-features = false, features = ["json"] }
+zip = { version = "9.1.3", default-features = false, features = ["deflate"] }
+
+[target."cfg(windows)".dependencies]
+windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_System_Registry", "Win32_System_Threading", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }

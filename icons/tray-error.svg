@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Written by icons.ts: edit that, not this file -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff6f61"/>
+      <stop offset="1" stop-color="#c42b1c"/>
+    </linearGradient>
+  </defs>
+  <path d="M208 16 H620 L920 316 V904 Q920 1008 816 1008 H208 Q104 1008 104 904 V120 Q104 16 208 16 Z" fill="url(#g)"/>
+  <path d="M620 16 V253.6 Q620 316 682.4 316 H920 Z" fill="#ffc7c1"/>
+  <rect x="452" y="300" width="120" height="400" rx="60" fill="#fff"/><circle cx="512" cy="836" r="68" fill="#fff"/>
+</svg>
